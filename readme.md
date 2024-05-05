@@ -175,3 +175,11 @@ Presione Enter para continuar...
 
 **Vicente Martinez**:
 - Desarrollo en solitario del codigo, juntos con las funciones.
+
+![d63ac5bcd7d3832dfb44ad829317fbff2ba5b6cf_128](https://github.com/viichorm/Tarea-2/assets/125922459/986606ce-420d-4121-84f2-3cf7e7251010)
+
+
+
+
+
+  
