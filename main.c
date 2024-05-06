@@ -173,7 +173,7 @@ void buscar_por_id(Map *pelis_byid) {
 }
 
 
-void buscar_por_genero(Map *pelis_byid) {
+void buscar_por_genero(Map *pelis_byid, Map *pelis_bygenre) {
   char genero[100];
   printf("Ingrese el género de películas a buscar: ");
   MapPair *pair = map_first(pelis_byid);
@@ -213,7 +213,7 @@ void buscar_por_genero(Map *pelis_byid) {
 }
 
 
-void buscar_por_director(Map *pelis_byid) {
+void buscar_por_director(Map *pelis_byid, Map *pelis_director) {
   char director[300]; // Buffer para almacenar el nombre del director ingresado por el usuario
   printf("Ingrese el nombre del director de películas a buscar: ");
 
@@ -258,7 +258,7 @@ void buscar_por_director(Map *pelis_byid) {
   }
 }
 
-void buscar_por_decada(Map *pelis_byid) {
+void buscar_por_decada(Map *pelis_byid, Map *pelis_byyear) {
   char decada[5]; // Buffer para almacenar la década ingresada por el usuario
   printf("Ingrese la década de películas a buscar (ejemplo: 1980, 2010): ");
 
@@ -297,7 +297,7 @@ void buscar_por_decada(Map *pelis_byid) {
   }
 }
 
-void buscar_por_decada_y_genero(Map *pelis_byid) {
+void buscar_por_decada_y_genero(Map *pelis_byid, Map *pelis_byyear, Map *pelis_bygenre) {
   char decada[5];
   char genero[100];
   
@@ -362,6 +362,9 @@ int main() {
   // Crea un mapa para almacenar películas, utilizando una función de
   // comparación que trabaja con claves de tipo string.
   Map *pelis_byid = map_create(is_equal_str);
+  Map *pelis_bygenre = map_create(is_equal_str);
+  Map *pelis_bydirector = map_create(is_equal_str);
+  Map *pelis_byyear = map_create(is_equal_int);
 
   // Recuerda usar un mapa por criterio de búsqueda
 
@@ -379,16 +382,16 @@ int main() {
       break;
       case '3':
       fflush(stdin); // Limpiar el buffer de entrada antes de solicitar la entrada del género
-      buscar_por_genero(pelis_byid);
+      buscar_por_genero(pelis_byid, pelis_bygenre);
       break;
     case '4':
-      buscar_por_director(pelis_byid);
+      buscar_por_director(pelis_byid, pelis_bydirector);
       break;
     case '5':
-      buscar_por_decada(pelis_byid);
+      buscar_por_decada(pelis_byid, pelis_byyear);
       break;
     case '6':
-      buscar_por_decada_y_genero(pelis_byid);
+      buscar_por_decada_y_genero(pelis_byid, pelis_byyear, pelis_bygenre);
       break;
     default:
       printf("Muchas gracias.\n");
