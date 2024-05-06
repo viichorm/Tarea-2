@@ -174,29 +174,47 @@ void buscar_por_id(Map *pelis_byid) {
 
 
 void buscar_por_genero(Map *pelis_byid, Map *pelis_bygenre) {
+  /*
+
+  Esta función buscar_por_genero toma dos parámetros: pelis_byid, que es un mapa que mapea IDs de películas a sus datos, y pelis_bygenre, que es un mapa que mapea géneros a las películas que pertenecen a esos géneros.
+  
+    */
   char genero[100];
   printf("Ingrese el género de películas a buscar: ");
-  MapPair *pair = map_first(pelis_byid);
+
+  //Declara una variable genero para almacenar el género de películas a buscar. Solicita al usuario que ingrese el género mediante un mensaje de impresión.
+  
+  MapPair *pair = map_first(pelis_byid); //Inicializa un iterador para recorrer el mapa pelis_byid que contiene las películas.
+  
   int c;
   while ((c = getchar()) != '\n' && c != EOF) { }
-
+//Limpia el buffer del teclado para evitar que queden caracteres no deseados antes de leer la entrada del usuario.
+  
+  
   fgets(genero, sizeof(genero), stdin);
   genero[strcspn(genero, "\n")] = 0;
 
+  //Lee la entrada del usuario (el género de películas a buscar) y elimina el carácter de nueva línea al final si lo hay.
+
+
   for (int i = 0; genero[i]; i++) {
     genero[i] = tolower(genero[i]);
-  }
+  } //Normaliza el género ingresado convirtiendo todos los caracteres a minúsculas.
 
   int found = 0;
   while (pair != NULL) {
     Film *peli = pair->value;
+
+    //Inicia un bucle mientras haya películas por revisar. Obtiene la película correspondiente al par de clave-valor actual.
+    
     void *current = list_first(peli->genres);
     while (current != NULL) {
       char current_genre[100];
-      strcpy(current_genre, (char *)current);
+      strcpy(current_genre, (char *)current); //Inicializa un iterador para recorrer la lista de géneros de la película actual y copia cada género en current_genre.
+      
       for (int i = 0; current_genre[i]; i++) {
         current_genre[i] = tolower(current_genre[i]);
-      }
+      } //Normaliza el género actual convirtiendo todos los caracteres a minúsculas.
       if (strcmp(current_genre, genero) == 0) {
         printf("ID: %s, Título: %s, Año: %d\n", peli->id, peli->title, peli->year);
         found = 1;
@@ -205,12 +223,12 @@ void buscar_por_genero(Map *pelis_byid, Map *pelis_bygenre) {
       current = list_next(peli->genres);
     }
     pair = map_next(pelis_byid);
-  }
+  } // Dentro de un bucle, compara el género actual con el género ingresado por el usuario. Si hay una coincidencia, imprime los detalles de la película (ID, título y año) y marca que se ha encontrado al menos una película.
 
   if (!found) {
     printf("No se encontraron películas del género %s\n", genero);
   }
-}
+} // Si no se encuentra ninguna película para el género ingresado, imprime un mensaje indicando que no se encontraron películas.
 
 
 void buscar_por_director(Map *pelis_byid, Map *pelis_director) {
@@ -298,8 +316,11 @@ void buscar_por_decada(Map *pelis_byid, Map *pelis_byyear) {
 }
 
 void buscar_por_decada_y_genero(Map *pelis_byid, Map *pelis_byyear, Map *pelis_bygenre) {
+  //(EN LA TEORIA) Esta función busca películas por década y género en una base de datos representada por tres mapas: pelis_byid, que mapea IDs de películas a sus datos, pelis_byyear, que mapea años de estreno a películas, y pelis_bygenre, que mapea géneros a las películas que pertenecen a esos géneros.
+  
   char decada[5];
   char genero[100];
+  // Declara dos arreglos de caracteres, decada para almacenar la década ingresada por el usuario y genero para almacenar el género de películas a buscar.
   
   printf("Ingrese la década de películas a buscar (ejemplo: 1980, 2010): ");
   do {
@@ -308,7 +329,8 @@ void buscar_por_decada_y_genero(Map *pelis_byid, Map *pelis_byyear, Map *pelis_b
     if (len > 0 && decada[len - 1] == '\n') {
       decada[len - 1] = '\0';
     }
-  } while (strlen(decada) == 0);
+  } while (strlen(decada) == 0); //Solicita al usuario que ingrese la década de películas a buscar. Utiliza un bucle do-while para asegurarse de que el usuario ingrese una entrada válida, eliminando el carácter de nueva línea al final si está presente.
+  
 
   // Convertir la década ingresada por el usuario a un número entero
   int decada_int = atoi(decada);
@@ -323,15 +345,15 @@ void buscar_por_decada_y_genero(Map *pelis_byid, Map *pelis_byyear, Map *pelis_b
 
   for (int i = 0; genero[i]; i++) {
     genero[i] = tolower(genero[i]);
-  }
+  } //Solicita al usuario que ingrese el género de películas a buscar. Limpia el buffer del teclado antes de leer la entrada del usuario. Lee la entrada del usuario en genero, eliminando el carácter de nueva línea si está presente, y luego normaliza el género convirtiendo todos los caracteres a minúsculas.
 
   MapPair *pair = map_first(pelis_byid);
   int found = 0;
   while (pair != NULL) {
     Film *peli = pair->value;
     int decada_estreno = peli->year / 10 * 10;
-
-    if (decada_estreno == decada_int) {
+// Inicializa un iterador para recorrer el mapa pelis_byid que contiene las películas. Calcula la década de estreno de la película actual dividiendo el año de estreno por 10 y multiplicando por 10. Si la década de estreno coincide con la década ingresada por el usuario, procede con la búsqueda del género.
+    if (decada_estreno == decada_int) { //
       void *current = list_first(peli->genres);
       while (current != NULL) {
         char current_genre[100];
@@ -348,11 +370,12 @@ void buscar_por_decada_y_genero(Map *pelis_byid, Map *pelis_byyear, Map *pelis_b
       }
     }
     pair = map_next(pelis_byid);
+    //Dentro de un bucle, recorre los géneros de la película actual y los normaliza convirtiendo todos los caracteres a minúsculas. Si encuentra una coincidencia entre el género de la película y el género ingresado por el usuario, imprime los detalles de la película y marca que se ha encontrado al menos una película.
   }
 
   if (!found) {
     printf("No se encontraron películas estrenadas en la década %s del género %s\n", decada, genero);
-  }
+  } //Si no se encuentra ninguna película para la década y género ingresados, imprime un mensaje indicando que no se encontraron películas.
 }
 
 int main() {
@@ -403,5 +426,3 @@ int main() {
   return 0;
 }
 
-// 7:16 AM 5/5/2024 ---- Todas mis funciones finalmente estan hechas.... mds.....
-// 7:17 AM 5/5/2024 ---- Ahora solo falta ordenar un poco y que todo sea mas legible....
